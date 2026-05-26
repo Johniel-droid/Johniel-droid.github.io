@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Johniel Peña — Mecatrónica ITLA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0c0c0b;
+    --bg2: #141413;
+    --bg3: #1c1c1a;
+    --line: rgba(255,255,255,0.08);
+    --line2: rgba(255,255,255,0.14);
+    --text: #f0ede8;
+    --muted: #888780;
+    --accent: #c9b99a;
+    --accent2: #8b7355;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(12px);
+    background: rgba(12,12,11,0.85);
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent2);
+    padding: 0.45rem 1.1rem;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent2); color: var(--bg); }
+
+  section { padding: 7rem 3rem; max-width: 1100px; margin: 0 auto; }
+
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: 8rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block; width: 40px; height: 1px;
+    background: var(--accent2);
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 8vw, 7.5rem);
+    line-height: 1.0;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 2.5rem;
+  }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-desc {
+    max-width: 520px;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+  .hero-actions { display: flex; gap: 1.5rem; align-items: center; }
+  .btn-primary {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-ghost:hover { color: var(--text); }
+  .btn-ghost::after { content: '↓'; font-size: 1rem; }
+
+  .hero-stats {
+    display: flex; gap: 4rem;
+    margin-top: 6rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--line);
+  }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  .stack-bar {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 1rem 0;
+    background: var(--bg2);
+  }
+  .stack-inner {
+    display: flex; gap: 3rem;
+    white-space: nowrap;
+    animation: scroll-left 25s linear infinite;
+  }
+  .stack-inner:hover { animation-play-state: paused; }
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .stack-tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .stack-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent2); }
+
+  .sec-header {
+    display: flex; align-items: baseline;
+    gap: 1.5rem; margin-bottom: 4rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .sec-num { font-size: 0.7rem; letter-spacing: 0.15em; color: var(--accent2); text-transform: uppercase; }
+  .sec-title { font-family: var(--serif); font-size: 2.5rem; font-weight: 400; color: var(--text); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .proj-card {
+    background: var(--bg);
+    padding: 2rem;
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .proj-card:hover { background: var(--bg3); }
+  .proj-index { font-size: 0.7rem; letter-spacing: 0.15em; color: var(--accent2); margin-bottom: 1.5rem; }
+  .proj-icon { font-size: 1.4rem; margin-bottom: 1rem; display: block; }
+  .proj-title { font-family: var(--serif); font-size: 1.25rem; font-weight: 400; color: var(--text); margin-bottom: 0.75rem; }
+  .proj-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    padding: 0.2rem 0.6rem;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .about-text { font-size: 1rem; color: var(--muted); line-height: 1.9; }
+  .about-text p + p { margin-top: 1.25rem; }
+  .about-text strong { color: var(--text); font-weight: 500; }
+  .skills-list { display: flex; flex-direction: column; gap: 1.25rem; }
+  .skill-row { display: flex; flex-direction: column; gap: 0.4rem; }
+  .skill-label {
+    display: flex; justify-content: space-between;
+    font-size: 0.8rem; letter-spacing: 0.05em; color: var(--muted);
+  }
+  .skill-bar { height: 1px; background: var(--line2); position: relative; }
+  .skill-fill { position: absolute; left: 0; top: 0; height: 1px; background: var(--accent); }
+
+  #contact { border-top: 1px solid var(--line); }
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .contact-headline {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+  .contact-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+  .contact-links { display: flex; flex-direction: column; gap: 0; margin-top: 2rem; }
+  .contact-link {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.75rem;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid var(--line);
+    padding: 1rem 0;
+  }
+  .contact-link:hover { color: var(--text); }
+  .contact-link-icon {
+    width: 32px; height: 32px;
+    border: 1px solid var(--line2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; flex-shrink: 0;
+  }
+  .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .form-input {
+    background: var(--bg2);
+    border: 1px solid var(--line2);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 300;
+    padding: 0.75rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    resize: vertical;
+  }
+  .form-input:focus { border-color: var(--accent2); }
+  .form-input::placeholder { color: var(--muted); opacity: 0.6; }
+  .btn-send {
+    align-self: flex-start;
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 0.8rem 2rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-send:hover { opacity: 0.85; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .footer-text { font-size: 0.8rem; color: var(--muted); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .hero-stats { gap: 2rem; flex-wrap: wrap; }
+    .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Johniel.Peña</a>
+  <ul class="nav-links">
+    <li><a href="#projects">Proyectos</a></li>
+    <li><a href="#about">Sobre mí</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+  <a href="mailto:penajohniel7@gmail.com" class="nav-cta">Contáctame</a>
+</nav>
+
+<section id="hero">
+  <div class="hero-eyebrow">Mecatrónica · ITLA · Santo Domingo, RD</div>
+  <h1 class="hero-title">
+    Johniel<br>
+    <em>David</em><br>
+    Peña.
+  </h1>
+  <p class="hero-desc">
+    Estudiante de Mecatrónica en el ITLA. Este portafolio es un recuento
+    de los proyectos realizados durante mi carrera — desde diseño de PCB
+    hasta automatización y sistemas neumáticos.
+  </p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn-primary">Ver proyectos</a>
+    <a href="#contact" class="btn-ghost">Hablemos</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">7</div>
+      <div class="stat-label">Proyectos</div>
+    </div>
+    <div>
+      <div class="stat-num">3.3</div>
+      <div class="stat-label">GPA / ITLA</div>
+    </div>
+    <div>
+      <div class="stat-num">B2</div>
+      <div class="stat-label">Inglés</div>
+    </div>
+  </div>
+</section>
+
+<div class="stack-bar">
+  <div class="stack-inner" id="ticker"></div>
+</div>
+
+<section id="projects">
+  <div class="sec-header">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">Proyectos</h2>
+  </div>
+  <div class="projects-grid">
+    <div class="proj-card">
+      <div class="proj-index">001</div>
+      <span class="proj-icon">🔋</span>
+      <h3 class="proj-title">Diseño de PCB</h3>
+      <p class="proj-desc">Diseño y fabricación de placas de circuito impreso para aplicaciones electrónicas. Captura de esquemáticos, layout y manufactura usando Altium Designer y KiCad.</p>
+      <div class="proj-tags">
+        <span class="tag">Altium</span>
+        <span class="tag">KiCad</span>
+        <span class="tag">PCB Layout</span>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-index">002</div>
+      <span class="proj-icon">⚙️</span>
+      <h3 class="proj-title">Diseño 3D de Mecanismo</h3>
+      <p class="proj-desc">Modelado y diseño de mecanismos industriales en 3D. Ensamblajes completos, planos técnicos y análisis de tolerancias para manufactura con SolidWorks y Fusion 360.</p>
+      <div class="proj-tags">
+        <span class="tag">SolidWorks</span>
+        <span class="tag">Fusion 360</span>
+        <span class="tag">GD&T</span>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-index">003</div>
+      <span class="proj-icon">🏭</span>
+      <h3 class="proj-title">Diseño de Sistemas de Automatización</h3>
+      <p class="proj-desc">Desarrollo de sistemas de automatización industrial mediante lógica de control, diagramas de flujo y programación de PLCs para procesos industriales eficientes.</p>
+      <div class="proj-tags">
+        <span class="tag">PLC</span>
+        <span class="tag">Ladder</span>
+        <span class="tag">Automatización</span>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-index">004</div>
+      <span class="proj-icon">⚡</span>
+      <h3 class="proj-title">Diseño de Circuitos de Potencia</h3>
+      <p class="proj-desc">Diseño y análisis de circuitos de electrónica de potencia. Incluye convertidores, drivers de motores y circuitos de alta tensión simulados en Multisim y Proteus.</p>
+      <div class="proj-tags">
+        <span class="tag">Multisim</span>
+        <span class="tag">Proteus</span>
+        <span class="tag">Potencia</span>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-index">005</div>
+      <span class="proj-icon">💨</span>
+      <h3 class="proj-title">Diseño de Sistemas Neumáticos</h3>
+      <p class="proj-desc">Diseño de circuitos y sistemas neumáticos para automatización de procesos. Selección de actuadores, válvulas y diseño de diagramas de control neumático.</p>
+      <div class="proj-tags">
+        <span class="tag">Neumática</span>
+        <span class="tag">Actuadores</span>
+        <span class="tag">Control</span>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-index">006</div>
+      <span class="proj-icon">🔌</span>
+      <h3 class="proj-title">Programación de Microcontroladores</h3>
+      <p class="proj-desc">Desarrollo de firmware y programas embebidos para Arduino, ESP32 y otros microcontroladores. Manejo de sensores, actuadores y comunicación serial/inalámbrica.</p>
+      <div class="proj-tags">
+        <span class="tag">Arduino</span>
+        <span class="tag">ESP32</span>
+        <span class="tag">C / C++</span>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-index">007</div>
+      <span class="proj-icon">🔒</span>
+      <h3 class="proj-title">Diseño de Sistema de Seguridad</h3>
+      <p class="proj-desc">Diseño e integración de sistemas electrónicos de seguridad. Control de acceso, sensores de detección y lógica de alarma implementados con microcontroladores y PLCs.</p>
+      <div class="proj-tags">
+        <span class="tag">Seguridad</span>
+        <span class="tag">Sensores</span>
+        <span class="tag">Control</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="sec-header">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">Sobre mí</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        Soy <strong>Johniel David Peña Bencosme</strong>, estudiante de
+        <strong>Mecatrónica en el ITLA</strong>, Santo Domingo.
+        Me caracterizo por enfrentar los problemas con determinación:
+        cuando algo no funciona, no me detengo hasta encontrar la solución.
+      </p>
+      <p>
+        Mi enfoque es práctico — investigo, consulto documentación, experimento
+        y no dudo en apoyarme en mis compañeros cuando hace falta una perspectiva
+        diferente. Creo que los mejores resultados se logran combinando
+        el estudio individual con el trabajo en equipo.
+      </p>
+      <p>
+        Este portafolio recoge los proyectos que he desarrollado a lo largo
+        de mi carrera, desde diseño electrónico hasta automatización y
+        mecánica. Cada uno refleja un problema real que tuve que resolver.
+      </p>
+    </div>
+    <div class="skills-list">
+      <div class="skill-row">
+        <div class="skill-label"><span>Diseño PCB (Altium / KiCad)</span><span>82%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label"><span>CAD / SolidWorks / Fusion 360</span><span>79%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:79%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label"><span>Programación de Microcontroladores</span><span>88%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label"><span>PLC & Automatización Industrial</span><span>76%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:76%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label"><span>Electrónica de Potencia</span><span>81%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:81%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label"><span>Sistemas Neumáticos</span><span>75%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label"><span>C / C++ & Python</span><span>84%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:84%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-inner">
+    <div>
+      <h2 class="contact-headline">¿Tienes algo<br><em style="font-style:italic; color:var(--accent)">en mente?</em></h2>
+      <p class="contact-sub">
+        Disponible para colaboraciones, proyectos académicos
+        y oportunidades de práctica profesional.
+        Respondo en menos de 24 horas.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:penajohniel7@gmail.com" class="contact-link">
+          <div class="contact-link-icon">✉</div>
+          penajohniel7@gmail.com
+        </a>
+        <a href="https://wa.me/18294859072" target="_blank" class="contact-link">
+          <div class="contact-link-icon">📱</div>
+          +1 829-485-9072
+        </a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-group">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-input" placeholder="Tu nombre">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" placeholder="tu@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mensaje</label>
+        <textarea class="form-input" rows="5" placeholder="Cuéntame en qué puedo ayudarte..."></textarea>
+      </div>
+      <button class="btn-send">Enviar mensaje</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-text">© 2026 Johniel David Peña Bencosme · ITLA · Santo Domingo, RD</span>
+  <span class="footer-text" style="opacity:0.5">Mecatrónica 🔧</span>
+</footer>
+
+<script>
+  const stack = ['SolidWorks','Fusion 360','Altium Designer','KiCad','PLC Programming',
+    'Arduino','ESP32','C / C++','Python','Neumática','Proteus','Multisim',
+    'PCB Design','Automatización','Control Industrial','Microcontroladores','Ladder Logic'];
+
+  const ticker = document.getElementById('ticker');
+  const items = [...stack, ...stack].map(s => {
+    const el = document.createElement('span');
+    el.className = 'stack-tag';
+    el.innerHTML = `<span class="stack-dot"></span>${s}`;
+    return el;
+  });
+  items.forEach(el => ticker.appendChild(el));
+</script>
+</body>
+</html>
